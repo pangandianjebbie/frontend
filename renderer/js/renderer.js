@@ -9,9 +9,28 @@ if (form) {
 
         const formData = new FormData(form);
 
+        let ingredients = formData.get("ingredients");
+        if (ingredients.length <= 8){
+            alertMessage('error', "Please input at least 8 characters!");
+        return;
+    }
+
         const response = await window.axios.openAI(formData.get("ingredients"));  
         document.getElementById("recipe_instructions").innerHTML = JSON.stringify(response.choices[0].text).replace(/\\n/g, '');
-        //console.log();
- 
     };
+}
+
+function alertMessage(status, ingredients){
+    window.Toastify.showToast({
+        text: ingredients,
+        duration: 5000,
+        stopOnFocus: true,
+        style:{
+            background: status == "error" ? "red":"green",
+            textAlign: "center",
+            color: "white", 
+            padding: "5px",
+            marginTop: "2px"
+        }
+    });
 }
